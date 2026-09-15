@@ -9,6 +9,32 @@
 
   var BRAND = { name: "FinTrust", sub: "Capital" }; // <- snadno vyměnitelné
 
+  /* ---------------------------------------------------------
+     FIREMNÍ ÚDAJE — JEDINÉ MÍSTO, KDE SE VYPLŇUJÍ.
+     Propíšou se do patičky, sekce Kontakt, Zásad ochrany osobních
+     údajů i do obsluhy formuláře. Prázdná položka se na webu
+     vůbec nezobrazí (žádné „[DOPLNIT]").
+       entity – obchodní firma provozovatele (např. „FinTrust Capital s.r.o.")
+       ico    – IČO
+       seat   – sídlo
+       email  – veřejný kontakt; zároveň adresa, kam chodí poptávky
+       phone  – veřejný telefon ve formátu +420 …
+       formEndpoint – volitelně URL služby pro příjem formulářů
+                      (Formspree, Web3Forms, vlastní API). Bez něj formulář
+                      otevře e-mailového klienta s předvyplněnou poptávkou.
+     --------------------------------------------------------- */
+  var COMPANY = {
+    entity: "",
+    ico: "",
+    seat: "",
+    email: "",
+    phone: "",
+    formEndpoint: ""
+  };
+  window.FTC_COMPANY = COMPANY;
+
+  var telHref = function (p) { return "tel:" + p.replace(/[^\d+]/g, ""); };
+
   var LOGO = '' +
     '<span class="logo" data-logo>' +
       '<img class="logo__wm" src="assets/fintrust-wordmark-inverted.svg" alt="FinTrust" width="356" height="83" />' +
@@ -83,24 +109,31 @@
               '<a href="https://fintg.cz" target="_blank" rel="noopener" data-cursor>Pojištění ↗</a>' +
             "</div>" +
             '<div><h4>Kontakt</h4>' +
-              '<a href="mailto:[DOPLNIT]" data-cursor>[DOPLNIT — e-mail]</a>' +
-              '<a href="tel:[DOPLNIT]" data-cursor>[DOPLNIT — telefon]</a>' +
+              (COMPANY.email ? '<a href="mailto:' + COMPANY.email + '" data-cursor>' + COMPANY.email + "</a>" : "") +
+              (COMPANY.phone ? '<a href="' + telHref(COMPANY.phone) + '" data-cursor>' + COMPANY.phone + "</a>" : "") +
+              '<a href="' + HREF("poptavka") + '" data-cursor>Nezávazná poptávka</a>' +
               '<span>Vše přes osobního poradce</span>' +
             "</div>" +
           "</nav>" +
         "</div>" +
 
         '<div class="legal">' +
-          '<p class="legal__entity">Provozovatel: <b>[DOPLNÍ KLIENT — entita se zakládá]</b> · IČO: [DOPLNIT] · Sídlo: [DOPLNIT]</p>' +
+          (COMPANY.entity
+            ? '<p class="legal__entity">Provozovatel: <b>' + COMPANY.entity + "</b>" +
+                (COMPANY.ico ? " · IČO: " + COMPANY.ico : "") +
+                (COMPANY.seat ? " · Sídlo: " + COMPANY.seat : "") + "</p>"
+            : "") +
           '<div class="legal__block">' +
-            "<span class=\"legal__tag\">[PRÁVNÍ TEXT — DODÁ COMPLIANCE]</span>" +
-            "<p>Zákonné informace o poskytovateli, oprávnění / licenci k poskytování spotřebitelského úvěru, reprezentativní příklad (RPSN, celková částka k úhradě) a povinná poučení doplní compliance před spuštěním. Tento web je pracovní návrh a neobsahuje závaznou nabídku.</p>" +
+            "<p>Informace uvedené na tomto webu mají orientační charakter a nepředstavují závaznou nabídku ani návrh na uzavření smlouvy. " +
+            "Konkrétní podmínky financování — včetně úrokové sazby, RPSN, celkové částky k úhradě a všech poplatků — obdržíte v individuální nabídce " +
+            "a ve smluvní dokumentaci před uzavřením smlouvy. Poskytnutí financování je vždy podmíněno individuálním posouzením. " +
+            '<a href="zasady-ochrany-osobnich-udaju.html" data-cursor>Zásady ochrany osobních údajů</a></p>' +
           "</div>" +
         "</div>" +
 
         '<div class="footer__bottom">' +
           "<span>© " + y + " " + BRAND.name + " " + BRAND.sub + " — součást skupiny FinTrust</span>" +
-          '<span class="footer__made">Pracovní návrh · placeholdery k doplnění</span>' +
+          '<a href="zasady-ochrany-osobnich-udaju.html" class="footer__made" data-cursor>Ochrana osobních údajů</a>' +
           '<a href="#top" class="footer__top-link" data-cursor data-magnetic>Nahoru ↑</a>' +
         "</div>" +
       "</footer>";
@@ -117,6 +150,26 @@
     var f = document.getElementById("site-footer");
     if (h) h.innerHTML = header();
     if (f) f.innerHTML = footer();
+    fillCompany();
+  }
+
+  // Háčky ve statickém HTML: [data-company="email|phone|entity|ico|seat"].
+  // Blok [data-company-block] se schová, když příslušný údaj chybí.
+  function fillCompany() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-company-block]"), function (b) {
+      var key = b.getAttribute("data-company-block");
+      if (key === "name") key = "entity";
+      if (!COMPANY[key]) b.hidden = true;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-company]"), function (el) {
+      var key = el.getAttribute("data-company"), val = COMPANY[key];
+      if (!val) return;
+      el.textContent = val;
+      if (el.tagName === "A") {
+        if (key === "email") el.href = "mailto:" + val;
+        if (key === "phone") el.href = telHref(val);
+      }
+    });
   }
 
   inject();

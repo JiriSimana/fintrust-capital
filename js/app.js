@@ -140,17 +140,65 @@
     if (hasST) ScrollTrigger.refresh();
   };
 
-  /* ---------- contact form ---------- */
+  /* ---------- contact form ----------
+     Kam poptávka jde, určuje window.FTC_COMPANY (js/components.js):
+       1) formEndpoint  -> odeslání na službu/API (POST, JSON)
+       2) email         -> otevře e-mailového klienta s předvyplněnou poptávkou
+       3) nic z toho    -> poctivá hláška, že formulář nelze odeslat
+     Dřív formulář hlásil „Odesláno ✓", ale data nikam neodcházela. */
   function initForm() {
     var form = document.getElementById("contactForm");
     if (!form) return;
+    var C = window.FTC_COMPANY || {};
+    var val = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; };
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var msg = document.getElementById("formMsg");
-      var name = (document.getElementById("cname") || {}).value || "";
-      if (msg) msg.textContent = "Děkujeme" + (name ? ", " + name.split(" ")[0] : "") +
-        "! Toto je náhledová verze — formulář zatím neodesílá. Napište nám na reality@fintg.cz.";
-      var b = form.querySelector('button[type="submit"]'); if (b) b.textContent = "Odesláno ✓";
+      var btn = form.querySelector('button[type="submit"]');
+      var say = function (t, ok) { if (msg) { msg.textContent = t; msg.style.color = ok === false ? "#e8a0a0" : ""; } };
+
+      var data = {
+        jmeno: val("cname"), telefon: val("cphone"), email: val("cmail"),
+        zajem: val("ctype"), castka: val("camount"), zprava: val("cmsg")
+      };
+      if (!data.jmeno) { say("Vyplňte prosím jméno a příjmení.", false); document.getElementById("cname").focus(); return; }
+      if (data.telefon.replace(/\D/g, "").length < 9) { say("Zadejte prosím platné telefonní číslo.", false); document.getElementById("cphone").focus(); return; }
+      if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) { say("Zkontrolujte prosím e-mailovou adresu.", false); document.getElementById("cmail").focus(); return; }
+
+      var first = data.jmeno.split(" ")[0];
+
+      if (C.formEndpoint) {
+        var label = btn ? btn.textContent : "";
+        if (btn) { btn.disabled = true; btn.textContent = "Odesílám…"; }
+        fetch(C.formEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(data)
+        }).then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          form.reset();
+          say("Děkujeme, " + first + "! Poptávku jsme přijali, poradce se vám ozve do následujícího pracovního dne.");
+          if (btn) btn.textContent = "Odesláno ✓";
+        }).catch(function () {
+          say("Poptávku se nepodařilo odeslat." + (C.phone ? " Zavolejte nám prosím na " + C.phone + "." : " Zkuste to prosím později."), false);
+          if (btn) { btn.disabled = false; btn.textContent = label; }
+        });
+        return;
+      }
+
+      if (C.email) {
+        var body = "Jméno: " + data.jmeno + "\nTelefon: " + data.telefon +
+          "\nE-mail: " + (data.email || "-") + "\nZájem o: " + data.zajem +
+          "\nPožadovaná částka: " + (data.castka || "-") + "\n\n" + (data.zprava || "");
+        window.location.href = "mailto:" + C.email +
+          "?subject=" + encodeURIComponent("Nezávazná poptávka – " + data.jmeno) +
+          "&body=" + encodeURIComponent(body);
+        say("Otevíráme váš e-mailový klient s předvyplněnou poptávkou — stačí ji odeslat.");
+        return;
+      }
+
+      say("Formulář momentálně nelze odeslat." + (C.phone ? " Zavolejte nám prosím na " + C.phone + "." : ""), false);
     });
   }
 

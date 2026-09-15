@@ -123,7 +123,7 @@
         e.preventDefault();
         e.stopImmediatePropagation(); // zablokuj generický handler v app.js
         var msg = document.getElementById("formMsg");
-        if (msg) msg.textContent = "Pro odeslání potvrďte prosím souhlas se zpracováním údajů.";
+        if (msg) msg.textContent = "Pro odeslání prosím potvrďte, že jste se seznámili se zpracováním osobních údajů.";
         gdpr.focus();
       }
     }, true); // capture -> běží před app.js

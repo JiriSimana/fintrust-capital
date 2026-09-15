@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=7" />
+<link rel="stylesheet" href="css/style.css?v=8" />
 </head>
 <body data-page="domu">
 
@@ -86,14 +86,14 @@
     </a>
     <a class="svc-card svc-card--link reveal-card" href="konsolidace.html" data-cursor>
       <div class="svc-card__icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M8 14h14M8 24h14M8 34h14M28 24h12M40 24l-6-5M40 24l-6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>Konsolidace <span class="tag tag--confirm">Potvrdit s klientem</span></h3>
-      <p>Sloučení více závazků do jedné splátky — proti zástavě nemovitosti. Rozsah upřesníme s klientem.</p>
+      <h3>Konsolidace</h3>
+      <p>Sloučení více závazků do jedné splátky — proti zástavě nemovitosti. Vše nastavíte s osobním poradcem.</p>
       <span class="svc-card__more">Detail služby →</span>
     </a>
     <a class="svc-card svc-card--link reveal-card" href="financovani-podnikatele.html" data-cursor>
       <div class="svc-card__icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M8 18h32v22H8zM18 18v-4a4 4 0 014-4h4a4 4 0 014 4v4M8 28h32" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>Financování pro podnikatele <span class="tag tag--confirm">Potvrdit s klientem</span></h3>
-      <p>Provozní i překlenovací financování proti zástavě nemovitosti pro OSVČ a firmy. Rozsah k potvrzení.</p>
+      <h3>Financování pro podnikatele</h3>
+      <p>Provozní i překlenovací financování proti zástavě nemovitosti pro OSVČ a firmy.</p>
       <span class="svc-card__more">Detail služby →</span>
     </a>
 
@@ -219,7 +219,7 @@
       <div class="faq__a"><p>Výše úvěru začíná od 50 000 Kč a odvíjí se od hodnoty nemovitosti (orientačně do 70 % LTV). U částek nad 10 000 000 Kč posuzujeme individuálně. Splatnost lze nastavit od 1 měsíce až do 20 let. Kalkulačka výše vám dá jen ilustrativní představu — přesnou nabídku připraví poradce.</p></div>
     </div>
     <div class="faq__item reveal-fade"><button class="faq__q" aria-expanded="false">Jak je to s poplatky, úroky a RPSN?<span class="faq__icon" aria-hidden="true"></span></button>
-      <div class="faq__a"><p>Standardně se pohybujeme od 12&nbsp;% ročně. Konkrétní úrok, poplatky, RPSN a reprezentativní příklad jsou součástí individuální nabídky a smluvní dokumentace. <span class="tag tag--confirm">Právní text — dodá compliance</span></p></div>
+      <div class="faq__a"><p>Standardně se pohybujeme od 12&nbsp;% ročně. Konkrétní úrok, poplatky, RPSN a reprezentativní příklad obdržíte v individuální nabídce před uzavřením smlouvy.</p></div>
     </div>
   </div>
 </section>
@@ -234,10 +234,10 @@
       <p class="contact__lead reveal-fade">Napište nám pár údajů. Nezávazně, diskrétně a bez jakéhokoliv závazku. Zbytek už probereme osobně.</p>
 
       <div class="contact__offices">
-        <div class="office reveal-fade"><h3>Telefon</h3><p>Vše přes osobního poradce</p><a href="tel:[DOPLNIT]" data-cursor>[DOPLNIT — telefon]</a></div>
-        <div class="office reveal-fade"><h3>E-mail</h3><p>Ozveme se obratem</p><a href="mailto:[DOPLNIT]" data-cursor>[DOPLNIT — e-mail]</a></div>
+        <div class="office reveal-fade" data-company-block="phone"><h3>Telefon</h3><p>Vše přes osobního poradce</p><a data-company="phone" data-cursor></a></div>
+        <div class="office reveal-fade" data-company-block="email"><h3>E-mail</h3><p>Ozveme se obratem</p><a data-company="email" data-cursor></a></div>
       </div>
-      <p class="contact__lead reveal-fade" style="margin-top:36px">Provozovatel: <strong>[DOPLNÍ KLIENT — entita se zakládá]</strong><br>Součást skupiny <a href="https://fintg.cz" target="_blank" rel="noopener" data-cursor style="border-bottom:1px solid var(--gold)">FinTrust</a>.</p>
+      <p class="contact__lead reveal-fade" style="margin-top:36px"><span data-company-block="name">Provozovatel: <strong data-company="entity"></strong><br></span>Součást skupiny <a href="https://fintg.cz" target="_blank" rel="noopener" data-cursor style="border-bottom:1px solid var(--gold)">FinTrust</a>.</p>
     </div>
 
     <form class="contact__form" id="contactForm" novalidate>
@@ -252,7 +252,7 @@
       <div class="field"><textarea id="cmsg" name="message" rows="3" placeholder=" "></textarea><label for="cmsg">Zpráva (nepovinné)</label></div>
       <div class="field field--check">
         <input type="checkbox" id="cgdpr" name="gdpr" required />
-        <label for="cgdpr">Souhlasím se zpracováním osobních údajů za účelem vyřízení poptávky. <span class="tag tag--confirm">Právní text — dodá compliance</span></label>
+        <label for="cgdpr">Beru na vědomí, že mé osobní údaje budou zpracovány za účelem vyřízení poptávky v souladu se <a href="zasady-ochrany-osobnich-udaju.html" target="_blank" data-cursor>Zásadami ochrany osobních údajů</a>.</label>
       </div>
       <button type="submit" class="btn btn--gold btn--block" data-cursor data-magnetic>Odeslat nezávaznou poptávku</button>
       <div class="form-note">
@@ -270,8 +270,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="js/components.js?v=7"></script>
-<script src="js/app.js?v=7"></script>
-<script src="js/capital.js?v=7"></script>
+<script src="js/components.js?v=8"></script>
+<script src="js/app.js?v=8"></script>
+<script src="js/capital.js?v=8"></script>
 </body>
 </html>

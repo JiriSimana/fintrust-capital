@@ -378,7 +378,8 @@ section{position:relative}
   background:linear-gradient(160deg,var(--green-700),var(--green-900));
   box-shadow:inset 0 0 0 1px var(--gold-line)}
 .prop__ctainner{padding:40px}
-.prop__ctainner h3{font-size:1.5rem;font-weight:600}
+/* nadpis dřív dědil tmavou --ink ze světlé sekce -> tmavý text na tmavé kartě */
+.prop__ctainner h3{font-size:1.5rem;font-weight:600;color:var(--white)}
 .prop__ctainner p{margin:12px 0 24px;color:var(--white-70);font-size:.95rem}
 .listings__note{text-align:center;color:var(--white-45);font-size:.82rem;margin-top:40px;
   padding:0 var(--pad)}
@@ -1031,3 +1032,16 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   .trust{gap:10px}
   .trust__item{width:100%}
 }
+
+/* ---- právní text (Zásady ochrany osobních údajů) ---- */
+.prose{max-width:760px;margin:0 auto;padding:0 var(--pad);color:var(--ink);font-size:1.02rem;line-height:1.7}
+.prose h2{font-size:clamp(1.2rem,2vw,1.45rem);font-weight:600;margin:48px 0 14px;color:var(--ink)}
+.prose h2:first-child{margin-top:0}
+.prose p{margin:0 0 14px}
+.prose ul{margin:0 0 14px 1.2em;padding:0}
+.prose li{margin:4px 0}
+.prose a{color:var(--ink);border-bottom:1px solid var(--gold)}
+.prose__date{margin-top:40px!important;font-size:.88rem;opacity:.65}
+
+/* skryté bloky (chybějící firemní údaje) nesmí odkrýt display z jiných pravidel */
+[hidden]{display:none!important}
