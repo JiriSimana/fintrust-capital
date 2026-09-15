@@ -83,7 +83,7 @@
       out.innerHTML =
         '<span class="calc__reslabel">Orientační měsíční splátka</span>' +
         '<span class="calc__resrange">od ' + fmt(round(splatka)) + "</span>" +
-        '<span class="calc__resnote">Pouze ilustrativní výpočet (úrok od ' + Math.round(t.rate * 1000) / 10 + ' % ročně) — nejde o nabídku ani konkrétní podmínky. ' +
+        '<span class="calc__resnote">Pouze ilustrativní výpočet (úrok od ' + String(Math.round(t.rate * 1000) / 10).replace(".", ",") + ' % ročně) — nejde o nabídku ani konkrétní podmínky. ' +
         "<b>Přesnou nabídku vám připraví váš poradce.</b></span>" +
         '<a href="#poptavka" class="btn btn--gold btn--block calc__cta" data-cursor data-magnetic>Chci nezávaznou nabídku od poradce</a>';
 
