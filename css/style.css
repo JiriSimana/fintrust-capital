@@ -872,7 +872,8 @@ html{overflow-x:hidden}
 /* ---- HERO panel (místo fotky) ---- */
 .hero__panel{position:relative;display:flex;align-items:center;justify-content:center;
   padding:120px var(--pad) 90px;background:
-    radial-gradient(120% 90% at 80% 10%,var(--green-800),var(--green-950) 75%)}
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22640%22%20height%3D%22220%22%20viewBox%3D%220%200%20640%20220%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23BE955D%22%20stroke-width%3D%221.4%22%20opacity%3D%220.35%22%3E%3Cpath%20d%3D%22M0%20200%20H640%22%20/%3E%3Crect%20x%3D%2230%22%20y%3D%22120%22%20width%3D%2246%22%20height%3D%2280%22%20/%3E%3Crect%20x%3D%2290%22%20y%3D%2290%22%20width%3D%2234%22%20height%3D%22110%22%20/%3E%3Crect%20x%3D%22140%22%20y%3D%22140%22%20width%3D%2252%22%20height%3D%2260%22%20/%3E%3Crect%20x%3D%22210%22%20y%3D%2270%22%20width%3D%2230%22%20height%3D%22130%22%20/%3E%3Crect%20x%3D%22256%22%20y%3D%22110%22%20width%3D%2240%22%20height%3D%2290%22%20/%3E%3Crect%20x%3D%22312%22%20y%3D%22150%22%20width%3D%2260%22%20height%3D%2250%22%20/%3E%3Crect%20x%3D%22388%22%20y%3D%2295%22%20width%3D%2236%22%20height%3D%22105%22%20/%3E%3Crect%20x%3D%22440%22%20y%3D%22130%22%20width%3D%2246%22%20height%3D%2270%22%20/%3E%3Crect%20x%3D%22500%22%20y%3D%2280%22%20width%3D%2230%22%20height%3D%22120%22%20/%3E%3Crect%20x%3D%22546%22%20y%3D%22120%22%20width%3D%2250%22%20height%3D%2280%22%20/%3E%3Cpath%20d%3D%22M30%20120%20h46%20M90%2090%20h34%20M210%2070%20h30%20M388%2095%20h36%20M500%2080%20h30%22%20/%3E%3C/g%3E%3C/svg%3E") bottom center / auto 220px repeat-x,
+    radial-gradient(120% 90% at 80% 10%,var(--green-800),var(--green-950) 75%) var(--green-950)}
 .hero__panel::before{content:"";position:absolute;top:-15%;right:-10%;width:60%;height:60%;
   background:radial-gradient(closest-side,rgba(198,161,94,.12),transparent);pointer-events:none}
 .panel-card{position:relative;width:100%;max-width:460px;background:rgba(15,33,28,.55);
@@ -880,7 +881,7 @@ html{overflow-x:hidden}
   padding:clamp(26px,3vw,40px);box-shadow:0 40px 80px -50px rgba(0,0,0,.8)}
 .panel-card__label{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .panel-card__list{list-style:none;margin:22px 0 0}
-.panel-card__list li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+.panel-card__list li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;
   padding:16px 0;border-top:1px solid var(--white-08)}
 .panel-card__list li:first-child{border-top:none;padding-top:6px}
 .panel-card__list span{color:var(--white-45);font-size:.9rem}
@@ -913,12 +914,13 @@ html{overflow-x:hidden}
 .params{background:var(--green-950);padding:clamp(80px,11vw,150px) 0}
 .params .section-title{color:var(--white)}
 .params__grid{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad);
-  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,28px)}
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px)}
 .param{padding:34px 28px;border-radius:18px;background:var(--green-850);
-  box-shadow:inset 0 0 0 1px var(--white-08)}
-.param__num{font-weight:600;font-size:clamp(2rem,3.4vw,2.9rem);color:var(--gold);line-height:1}
+  box-shadow:inset 0 0 0 1px var(--white-08);display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.param__num{font-weight:600;font-size:clamp(1.7rem,3vw,2.9rem);color:var(--gold);line-height:1.1;
+  min-height:clamp(2.2rem,3.6vw,3.2rem);display:flex;align-items:flex-end}
 .param__num i{font-style:normal;font-size:.5em;color:var(--white-45);display:inline}
-.param__label{margin-top:12px;color:var(--white-70);font-size:.95rem}
+.param__label{margin-top:12px;color:var(--white-70);font-size:.95rem;text-align:left}
 .params__note{max-width:var(--maxw);margin:34px auto 0;padding:0 var(--pad);
   color:var(--white-45);font-size:.82rem}
 
@@ -1019,12 +1021,13 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 /* ---- responsive (Capital-specific) ---- */
 @media (max-width:1080px){
   .hero__panel{padding:40px var(--pad) 60px}
-  .params__grid{grid-template-columns:repeat(2,1fr)}
   .calc{grid-template-columns:1fr}
   .advisor__grid{grid-template-columns:1fr}
 }
-@media (max-width:560px){
+@media (max-width:760px){
   .params__grid{grid-template-columns:1fr}
+}
+@media (max-width:560px){
   .trust{gap:10px}
   .trust__item{width:100%}
 }

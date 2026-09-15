@@ -12,15 +12,34 @@
   };
 
   /* ---------- ORIENTAČNÍ KALKULAČKA ----------
-     Čistě ilustrativní rozpětí splátky. Nezobrazuje úrok/RPSN.
-     Zástava vždy formou nemovitosti — liší se jen typ nemovitosti.
-     Faktory jsou vědomě široké a orientační — přesné podmínky vždy poradce. */
+     Čistě ilustrativní měsíční splátka počítaná z jedné úrokové sazby (od cca 12 % p.a.).
+     Nezobrazuje RPSN. Zástava vždy formou nemovitosti — liší se jen typ nemovitosti. */
   var NEMOVITOST = {
-    byt:      { label: "Byt", lo: 0.011, hi: 0.018 },
-    dum:      { label: "Rodinný dům", lo: 0.011, hi: 0.019 },
-    pozemek:  { label: "Pozemek", lo: 0.013, hi: 0.021 },
-    komercni: { label: "Komerční objekt", lo: 0.012, hi: 0.020 },
+    byt:      { label: "Byt", rate: 0.12 },
+    dum:      { label: "Rodinný dům", rate: 0.125 },
+    pozemek:  { label: "Pozemek", rate: 0.14 },
+    komercni: { label: "Komerční objekt", rate: 0.13 },
   };
+
+  var MAX_AMOUNT = 10000000;
+
+  function formatSplatnost(M) {
+    if (M < 12) return M + (M === 1 ? " měsíc" : M < 5 ? " měsíce" : " měsíců");
+    var years = Math.floor(M / 12);
+    var rest = M % 12;
+    var out = years + (years === 1 ? " rok" : years < 5 ? " roky" : " let");
+    if (rest > 0) out += " " + rest + (rest === 1 ? " měsíc" : rest < 5 ? " měsíce" : " měsíců");
+    return out;
+  }
+
+  // Aktualizuje CSS proměnnou --fill na range inputu, aby se ukazatel (track) hýbal s kuličkou.
+  function syncRangeFill(el) {
+    var min = parseFloat(el.min) || 0;
+    var max = parseFloat(el.max) || 100;
+    var val = parseFloat(el.value);
+    var pct = max > min ? ((val - min) / (max - min)) * 100 : 0;
+    el.style.setProperty("--fill", pct + "%");
+  }
 
   function initCalculator() {
     var root = document.getElementById("calc");
@@ -37,20 +56,34 @@
       var M = parseInt(months.value, 10);
       var t = NEMOVITOST[typeSel.value] || NEMOVITOST.byt;
 
-      amountOut.textContent = fmt(A);
-      monthsOut.textContent = M + (M === 1 ? " měsíc" : M < 5 ? " měsíce" : " měsíců");
+      syncRangeFill(amount);
+      syncRangeFill(months);
 
-      // ilustrativní rozpětí měsíční splátky
+      monthsOut.textContent = formatSplatnost(M);
+
+      var isMax = A >= MAX_AMOUNT;
+      amountOut.textContent = isMax ? "10 000 000 Kč a víc" : fmt(A);
+
+      if (isMax) {
+        out.innerHTML =
+          '<span class="calc__reslabel">Požadovaná částka</span>' +
+          '<span class="calc__resrange">Individuální</span>' +
+          '<span class="calc__resnote">Nad 10 000 000 Kč posuzujeme každou žádost individuálně. ' +
+          "<b>Nabídku vám připraví váš poradce.</b></span>" +
+          '<a href="#poptavka" class="btn btn--gold btn--block calc__cta" data-cursor data-magnetic>Chci nezávaznou nabídku od poradce</a>';
+        if (window.FTR && FTR.enhance) FTR.enhance(out);
+        return;
+      }
+
+      // ilustrativní měsíční splátka: jistina/splatnost + orientační úrok (od t.rate ročně)
       var base = A / M;
-      var lo = base + A * t.lo;
-      var hi = base + A * t.hi;
-      // zaokrouhlení na hezká čísla
+      var splatka = base + A * (t.rate / 12);
       var round = function (x) { return Math.round(x / 100) * 100; };
 
       out.innerHTML =
         '<span class="calc__reslabel">Orientační měsíční splátka</span>' +
-        '<span class="calc__resrange">' + fmt(round(lo)) + " – " + fmt(round(hi)) + "</span>" +
-        '<span class="calc__resnote">Pouze ilustrativní výpočet — nejde o nabídku ani konkrétní podmínky. ' +
+        '<span class="calc__resrange">od ' + fmt(round(splatka)) + "</span>" +
+        '<span class="calc__resnote">Pouze ilustrativní výpočet (úrok od ' + Math.round(t.rate * 1000) / 10 + ' % ročně) — nejde o nabídku ani konkrétní podmínky. ' +
         "<b>Přesnou nabídku vám připraví váš poradce.</b></span>" +
         '<a href="#poptavka" class="btn btn--gold btn--block calc__cta" data-cursor data-magnetic>Chci nezávaznou nabídku od poradce</a>';
 
